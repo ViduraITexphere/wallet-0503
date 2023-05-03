@@ -16,26 +16,12 @@ async function saveId(req, res) {
     });
   }
 
-  // Find the document in MongoDB with the matching discordId
-  let doc = await MyModel.findOne({ discordId: idFromPath });
-
-  if (doc) {
-    // If a document is found, save wallet address to the document
-    try {
-      doc.discordId = walletAddress;
-      await doc.save();
-    } catch (err) {
-      console.error("Error saving wallet address:", err);
-      res.status(500).json({ error: "Error saving wallet address" });
-      return;
-    }
-  } else {
-    // If a document is not found, create a new document with the discordId and wallet address
-    doc = await MyModel.create({
-      discordId: idFromPath,
-      walletAddress,
-    });
-  }
+  // Find the document in MongoDB with the matching discordId and update or create it
+  let doc = await MyModel.findOneAndUpdate(
+    { discordId: idFromPath },
+    { walletAddress },
+    { upsert: true, new: true }
+  );
 
   // Return the saved document
   res.status(200).json(doc);
