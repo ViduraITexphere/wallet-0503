@@ -4,9 +4,10 @@ const mongoose = require("mongoose");
 const connection = {};
 
 async function saveId(req, res) {
-  const { idFromPath, walletAddress } = req.body;
+  const { idFromPath, walletAddress, metamaskWalletAddress } = req.body;
   console.log("walletAddress : 🥺 ", walletAddress);
   console.log("idFromPath : 🥺 ", idFromPath);
+  console.log("metamaskWalletAddress : 🥺 ", metamaskWalletAddress);
 
   // Connect to MongoDB if not already connected
   if (!connection.isConnected) {
@@ -19,7 +20,10 @@ async function saveId(req, res) {
   // Find the document in MongoDB with the matching discordId and update or create it
   let doc = await MyModel.findOneAndUpdate(
     { discordId: idFromPath },
-    { walletAddress },
+    {
+      cosmoWalletAddress: walletAddress,
+      metamaskWalletAddress: metamaskWalletAddress,
+    },
     { upsert: true, new: true }
   );
 

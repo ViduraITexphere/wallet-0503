@@ -1,6 +1,7 @@
 // website/pages/_app.js
 import { ChakraProvider } from "@chakra-ui/react";
 import { GrazProvider, mainnetChains } from "graz";
+import "../styles/globals.css";
 
 export default function CustomApp(props) {
   const { Component, pageProps } = props;
